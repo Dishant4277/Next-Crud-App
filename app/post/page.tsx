@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import useSWR from "swr";
 import { fetcher } from "../libs";
-import Post from "../components/Post";
+import Post from "@/components/Post";
 import { PostModel } from "../types";
 import Link from "next/link";
 
