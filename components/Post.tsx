@@ -1,5 +1,5 @@
 import React from "react";
-import { PostModel } from "../types";
+import { PostModel } from "@/app/types";
 import Link from "next/link";
 import Status from "./Status";
 export default function Post(params: PostModel) {
