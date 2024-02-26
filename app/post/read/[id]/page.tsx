@@ -1,8 +1,8 @@
 "use client";
-import { fetcher } from "@/app/libs";
 import useSWR from "swr";
 
 export default function Detail({ params }: { params: { id: number } }) {
+  const fetcher = (url: string) => fetch(url).then((res) => res.json());
   const {
     data: post,
     isLoading,
@@ -14,7 +14,11 @@ export default function Detail({ params }: { params: { id: number } }) {
         <span>Loading...</span>
       </div>
     );
+  if (error) {
+    return error;
+  }
   if (!post) return null;
+
   return (
     <div className="w-full">
       <h2 className="text-center font-bold text-3xl py-3">{post.title}</h2>

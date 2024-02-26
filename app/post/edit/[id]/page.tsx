@@ -1,9 +1,9 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { fetcher } from "@/app/libs";
 import useSWR from "swr";
 export default function PostEdit({ params }: { params: { id: number } }) {
+  const fetcher = (url: string) => fetch(url).then((res) => res.json());
   const router = useRouter();
   const {
     data: post,
@@ -12,10 +12,12 @@ export default function PostEdit({ params }: { params: { id: number } }) {
   } = useSWR(`/api/posts/${params.id}`, fetcher);
   const [title, setTitle] = useState<string>("");
   const [body, setBody] = useState<string>("");
+  const [status, setStatus] = useState<Number>();
   useEffect(() => {
     if (post) {
       setTitle(post.title);
       setBody(post.body);
+      setStatus(post.publish);
     }
   }, [post, isLoading]);
   const updatePost = async (e: any) => {
@@ -24,6 +26,7 @@ export default function PostEdit({ params }: { params: { id: number } }) {
       const formData = {
         title: title,
         body: body,
+        publish: status,
       };
       const res = await fetch(`/api/posts/${params.id}`, {
         method: "PUT",
@@ -53,11 +56,12 @@ export default function PostEdit({ params }: { params: { id: number } }) {
         Form Add
       </span>
       <div className="w-full py-2">
-        <label htmlFor="" className="text-sm font-bold py-2 block">
+        <label htmlFor="title" className="text-sm font-bold py-2 block">
           Title
         </label>
         <input
           type="text"
+          id="title"
           name="title"
           className="w-full border-[1px] border-gray-200 p-2 rounded-sm"
           value={title}
@@ -65,16 +69,36 @@ export default function PostEdit({ params }: { params: { id: number } }) {
         />
       </div>
       <div className="w-full py-2">
-        <label htmlFor="" className="text-sm font-bold py-2 block">
+        <label htmlFor="body" className="text-sm font-bold py-2 block">
           Content
         </label>
         <textarea
           rows={5}
           name="body"
+          id="body"
           className="w-full border-[1px] border-gray-200 p-2 rounded-sm"
           value={body}
           onChange={(e: any) => setBody(e.target.value)}
         />
+      </div>
+      <div className="w-full py-2">
+        <label htmlFor="status" className="text-sm font-bold py-2 block">
+          Visibility of Your Post
+        </label>
+        <select
+          id="status"
+          name="status"
+          className="w-full border-[1px] border-gray-200 p-2 rounded-sm"
+          onChange={(e: any) => setStatus(e.target.value)}
+          defaultValue={"null"}
+          required
+        >
+          <option value="null" disabled>
+            Select
+          </option>
+          <option value={1}>Public</option>
+          <option value={0}>Private</option>
+        </select>
       </div>
       <div className="w-full py-2">
         <button className="w-20 p-2 text-white border-gray-200 border-[1px] rounded-sm bg-green-400">

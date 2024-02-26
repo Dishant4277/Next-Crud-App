@@ -1,12 +1,12 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import useSWR from "swr";
-import { fetcher } from "../libs";
 import Post from "@/components/Post";
-import { PostModel } from "../types";
+import { PostModel } from "@/types";
 import Link from "next/link";
 
 export default function Posts() {
+  const fetcher = (url: string) => fetch(url).then((res) => res.json());
   const [posts, setPosts] = useState<PostModel[]>([]);
   const { data, error, isLoading } = useSWR<any>(`/api/posts`, fetcher);
   useEffect(() => {
