@@ -5,12 +5,12 @@ import path from "node:path";
 
 const filePath = path.join(process.cwd(), "/public/data.json");
 
-export async function readData() {
+async function readData() {
   const data = await fs.readFile(filePath, { encoding: "utf8" });
   return data;
 }
 
-export async function writeData(data: PostModel[]) {
+async function writeData(data: PostModel[]) {
   const promise = fs.writeFile(filePath, JSON.stringify(data));
   return promise;
 }

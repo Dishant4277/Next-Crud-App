@@ -1,5 +1,19 @@
 import { NextRequest, NextResponse } from "next/server";
-import { readData, writeData } from "./[id]/route";
+import * as fs from "node:fs/promises";
+import path from "node:path";
+import { PostModel } from "@/types";
+
+const filePath = path.join(process.cwd(), "/public/data.json");
+
+async function readData() {
+  const data = await fs.readFile(filePath, { encoding: "utf8" });
+  return data;
+}
+
+async function writeData(data: PostModel[]) {
+  const promise = fs.writeFile(filePath, JSON.stringify(data));
+  return promise;
+}
 
 export async function GET() {
   try {
